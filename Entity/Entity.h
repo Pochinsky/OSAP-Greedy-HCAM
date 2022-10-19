@@ -21,7 +21,7 @@ public:
     /**
      * Getters
      */
-    int getID();
+    int getID() const;
     double getSpace();
 
     /**

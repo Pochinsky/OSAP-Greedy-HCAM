@@ -9,7 +9,7 @@ void Entity::setID(int ID) { this->ID = ID; }
 void Entity::setSpace(double space) { this->space = space; }
 
 // getters
-int Entity::getID() { return this->ID; }
+int Entity::getID() const { return this->ID; }
 
 double Entity::getSpace() { return this->space; }
 
