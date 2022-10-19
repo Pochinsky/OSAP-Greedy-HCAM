@@ -11,6 +11,18 @@
  */
 int randint(int n);
 
+bool checkAllocation(int idEntity, int idRoom, map<int,int> solution);
+
+bool checkCapacity(int idRoom, vector<Entity> entities, vector<Room> rooms, map<int, int> solution);
+
+bool checkSameRoom(int idEntity1, int idEntity2, map<int, int> solution);
+
+bool checkAdjacency(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution);
+
+bool checkNearness(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution);
+
+bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constraint> hardConstraints, map<int, int> solution);
+
 /**
  * @brief	Genera una solución inicial aleatoria
  *
@@ -24,13 +36,6 @@ void initialSolution(
 		vector<Room> rooms,
 		int nOfRooms,
 		map<int, int> *solution);
-
-/**
- * @brief	Muestra por pantalla las asignaciones de una solución
- *
- * @param solution	Hashmap el cual contiene la solución que se quiere visualizar
- */
-void printSolution(map<int, int> solution);
 
 /**
  * @brief	Aplica Hill Climbing First Improve a una instancia del OSAP
@@ -57,3 +62,10 @@ void hillClimbing(
 		vector<Constraint> softConstraints,
 		vector<Constraint> hardConstraints,
 		map<int, int> *solution);
+
+/**
+ * @brief	Muestra por pantalla las asignaciones de una solución
+ *
+ * @param solution	Hashmap el cual contiene la solución que se quiere visualizar
+ */
+void printSolution(map<int, int> solution);
