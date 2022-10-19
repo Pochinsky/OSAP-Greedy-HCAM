@@ -3,11 +3,15 @@
 
 using namespace std;
 
+/**
+ * @brief   Representación de una sala
+ * 
+ */
 class Room
 {
 private:
     /**
-     * attributes
+     * Atributos
      */
     int ID;
     int floor;
@@ -16,13 +20,14 @@ private:
     list<int> adjacentRooms;
 
     /**
-     * Show the list of adjacent rooms of the current room on formated structure
+     * @brief   Muestra por pantalla las salas adyacentes de la sala en cuestión
+     * 
      */
     void printAdjacentList();
 
 public:
     /**
-     * setters
+     * Setters
      */
     void setID(int ID);
     void setFloor(int floor);
@@ -31,7 +36,7 @@ public:
     void setAdjacentRooms(list<int> adjacentRooms);
 
     /**
-     * getters
+     * Getters
      */
     int getID();
     int getFloor();
@@ -40,12 +45,13 @@ public:
     list<int> getAdjacentRooms();
 
     /**
-     * constructor
+     * Constructor
      */
     Room(int ID, int floor, double capacity, int sizeLA, list<int> adjacentRooms);
 
     /**
-     * Show the data of instance on formated structure
+     * @brief   Muestra por pantalla la información de la sala
+     * 
      */
     void print();
 };

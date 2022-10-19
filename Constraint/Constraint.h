@@ -1,8 +1,12 @@
+/**
+ * @brief   Representación de una restricción
+ * 
+ */
 class Constraint
 {
 private:
     /**
-     * attributes
+     * Atributos
      */
     int ID;
     int type;
@@ -12,7 +16,7 @@ private:
 
 public:
     /**
-     * setters
+     * Setters
      */
     void setID(int ID);
     void setType(int type);
@@ -21,7 +25,7 @@ public:
     void setParameter2(int parameter2);
 
     /**
-     * getters
+     * Getters
      */
     int getID();
     int getType();
@@ -30,12 +34,13 @@ public:
     int getParameter2();
 
     /**
-     * constructor
+     * Constructor
      */
     Constraint(int ID, int type, int constraintType, int parameter1, int parameter2);
 
     /**
-     * Show the data of constraint on formated structure
+     * @brief   Muestra por pantalla la información de la restricción
+     * 
      */
     void print();
 };

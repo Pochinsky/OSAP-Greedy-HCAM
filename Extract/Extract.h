@@ -5,19 +5,27 @@
 #include "../Constraint/Constraint.h"
 
 /**
- * split a string in a substrings separated by a splitter
- *
- * @param   str       string to split
- * @param   splitter  char that delimiter each substrin
- * @returns a vector with substrings from split
+ * @brief	Divide un string en varios substrings utilizando como punto de corte un delimitador dado
+ * 
+ * @param 	str 						String a dividir
+ * @param 	splitter 				Separador que indica el carácter que se utilizará como delimitador
+ * @return	vector<string>	Vector de strings con todos los substrings de str obtenidos
  */
 vector<string> splitString(string str, char splitter);
 
 /**
- * get data of an instance of OSAP from .txt file
- *
- * @param   filename path to file to read
- * @returns a Data class with data extracted from the instance
+ * @brief	Extrae los datos de una instancia del OSAP
+ * 
+ * @param filename 						Nombre del archivo en el cual se almacenan los datos de la instancia
+ * @param nOfEntities 				Número de entidades
+ * @param nOfRooms 						Número de salas
+ * @param nOfFloors 					Número de pisos
+ * @param nOfHardConstraints	Número de restricciones duras
+ * @param nOfSoftConstraints	Número de restricciones blandas
+ * @param entities 						Vector de entidades
+ * @param rooms 							Vector de salas
+ * @param softConstraints 		Vector de restricciones blandas
+ * @param hardConstraints 		Vector de restricciones duras
  */
 void extractData(
 		string filename,
