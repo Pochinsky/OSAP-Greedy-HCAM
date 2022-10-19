@@ -1,21 +1,21 @@
 ##### Variables #####
 CC 				= g++
-CFLAGS			= -g -Wall
+CFLAGS		= -g -Wall
 RM 				= rm -f *.o
 
 all: main
 
-main: main.o extract.o data.o entity.o room.o constraint.o
-	$(CC) $(CFLAGS) -o main main.o Extract.o Data.o Entity.o Room.o Constraint.o
+main: constraint.o room.o entity.o extract.o solution.o main.o
+	$(CC) $(CFLAGS) -o main main.o Solution.o Extract.o Entity.o Room.o Constraint.o
 
 main.o:  main.cpp
 	$(CC) $(CFLAGS) -c main.cpp 
 
+solution.o: Solution/Solution.cpp
+	$(CC) $(CFLAGS) -c Solution/Solution.cpp
+
 extract.o: Extract/Extract.cpp
 	$(CC) $(CFLAGS) -c Extract/Extract.cpp
-
-data.o: Data/Data.cpp 
-	$(CC) $(CFLAGS) -c Data/Data.cpp 
 
 entity.o: Entity/Entity.cpp
 	$(CC) $(CFLAGS) -c Entity/Entity.cpp
@@ -27,7 +27,7 @@ constraint.o: Constraint/Constraint.cpp
 	$(CC) $(CFLAGS) -c Constraint/Constraint.cpp
 
 run:
-	./main
+	./main $(instance)
 
 clean:
 	$(RM)
