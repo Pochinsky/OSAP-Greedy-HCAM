@@ -18,8 +18,8 @@ bool checkCapacity(int idRoom, vector<Entity> entities, vector<Room> rooms, map<
 	vector<Room>::iterator itR;
 	int roomCapacity;
 	for (itR = rooms.begin(); itR != rooms.end(); itR++)
-		if (idRoom == itR->getID())
-			roomCapacity = itR->getCapacity();
+		if (idRoom == itR->id)
+			roomCapacity = itR->capacity;
 	map<int, int>::iterator itS;
 	list<int> entitiesInRoom;
 	entitiesInRoom.push_back(1);
@@ -30,8 +30,8 @@ bool checkCapacity(int idRoom, vector<Entity> entities, vector<Room> rooms, map<
 	vector<Entity>::iterator itE;
 	int sizeUse = 0;
 	for (itE = entities.begin(); itE != entities.end(); itE++)
-		if (find(entitiesInRoom.begin(), entitiesInRoom.end(), itE->getID()) != entitiesInRoom.end())
-			sizeUse += itE->getSpace();
+		if (find(entitiesInRoom.begin(), entitiesInRoom.end(), itE->id) != entitiesInRoom.end())
+			sizeUse += itE->space;
 	if (sizeUse > roomCapacity)
 		return false;
 	return true;
@@ -75,11 +75,11 @@ bool checkAdjacency(int idEntity1, int idEntity2, vector<Room> rooms, map<int, i
 	vector<Room>::iterator itR;
 	for (itR = rooms.begin(); itR != rooms.end(); itR++)
 	{
-		if (idRoom1 == itR->getID())
-			if (find(itR->getAdjacentRooms().begin(), itR->getAdjacentRooms().end(), idRoom2) == itR->getAdjacentRooms().end())
+		if (idRoom1 == itR->id)
+			if (find(itR->adjacentRooms.begin(), itR->adjacentRooms.end(), idRoom2) == itR->adjacentRooms.end())
 				return false;
-		if (idRoom2 == itR->getID())
-			if (find(itR->getAdjacentRooms().begin(), itR->getAdjacentRooms().end(), idRoom1) == itR->getAdjacentRooms().end())
+		if (idRoom2 == itR->id)
+			if (find(itR->adjacentRooms.begin(), itR->adjacentRooms.end(), idRoom1) == itR->adjacentRooms.end())
 				return false;
 	}
 	return true;
@@ -104,10 +104,10 @@ bool checkNearness(int idEntity1, int idEntity2, vector<Room> rooms, map<int, in
 	vector<Room>::iterator itR;
 	for (itR = rooms.begin(); itR != rooms.end(); itR++)
 	{
-		if (idRoom1 == itR->getID())
-			idFloor1 = itR->getFloor();
-		if (idRoom2 == itR->getID())
-			idFloor2 = itR->getFloor();
+		if (idRoom1 == itR->id)
+			idFloor1 = itR->floor;
+		if (idRoom2 == itR->id)
+			idFloor2 = itR->floor;
 	}
 	if (idFloor1 != idFloor2)
 		return false;
@@ -119,61 +119,71 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 	vector<Constraint>::iterator itC;
 	for (itC = hardConstraints.begin(); itC != hardConstraints.end(); itC++)
 	{
-		switch (itC->getType())
+		cout << "########## checkFeasible " << itC - hardConstraints.begin() << " ##########" << endl;
+		switch (itC->type)
 		{
 		case 0: /* ALLOCATION_CONSTRAINT */
 		{
-			if (!checkAllocation(itC->getParameter1(), itC->getParameter2(), solution))
+			cout << "ALLOCATION_CONSTRAINT" << endl;
+			if (!checkAllocation(itC->parameter1, itC->parameter2, solution))
 				return false;
 			break;
 		}
 		case 1: /* NONALLOCATION_CONSTRAINT */
 		{
-			if (checkAllocation(itC->getParameter1(), itC->getParameter2(), solution))
+			cout << "NONALLOCATION_CONSTRAINT" << endl;
+			if (checkAllocation(itC->parameter1, itC->parameter2, solution))
 				return false;
 			break;
 		}
 		case 3: /* CAPACITY_CONSTRAINT */
 		{
-			if (!checkCapacity(itC->getID(), entities, rooms, solution))
+			cout << "CAPACITY_CONSTRAINT" << endl;
+			if (!checkCapacity(itC->id, entities, rooms, solution))
 				return false;
 			break;
 		}
 		case 4: /* SAMEROOM_CONSTRAINT */
 		{
-			if (!checkSameRoom(itC->getParameter1(), itC->getParameter2(), solution))
+			cout << "SAMEROOM_CONSTRAINT" << endl;
+			if (!checkSameRoom(itC->parameter1, itC->parameter2, solution))
 				return false;
 			break;
 		}
 		case 5: /* NOTSAMEROOM_CONSTRAINT */
 		{
-			if (checkSameRoom(itC->getParameter1(), itC->getParameter2(), solution))
+			cout << "NOTSAMEROOM_CONSTRAINT" << endl;
+			if (checkSameRoom(itC->parameter1, itC->parameter2, solution))
 				return false;
 			break;
 		}
 		case 6: /* NOTSHARING_CONSTRAINT */
 		{
+			cout << "NOTSHARING_CONSTRAINT" << endl;
 			map<int, int>::iterator itS;
 			for (itS = solution.begin(); itS != solution.end(); itS++)
-				if (checkSameRoom(itC->getParameter1(), itS->first, solution))
+				if (checkSameRoom(itC->parameter1, itS->first, solution))
 					return false;
 			break;
 		}
 		case 7: /* ADJACENCY_CONSTRAINT */
 		{
-			if (!checkAdjacency(itC->getParameter1(), itC->getParameter1(), rooms, solution))
+			cout << "ADJACENCY_CONSTRAINT" << endl;
+			if (!checkAdjacency(itC->parameter1, itC->parameter2, rooms, solution))
 				return false;
 			break;
 		}
 		case 8: /* NEARBY_CONSTRAINT */
 		{
-			if (!checkNearness(itC->getParameter1(), itC->getParameter1(), rooms, solution))
+			cout << "NEARBY_CONSTRAINT" << endl;
+			if (!checkNearness(itC->parameter1, itC->parameter2, rooms, solution))
 				return false;
 			break;
 		}
 		case 9: /* AWAYFROM_CONSTRAINT */
 		{
-			if (checkNearness(itC->getParameter1(), itC->getParameter1(), rooms, solution))
+			cout << "AWAYFROM_CONSTRAINT" << endl;
+			if (checkNearness(itC->parameter1, itC->parameter2, rooms, solution))
 				return false;
 			break;
 		}
@@ -191,7 +201,7 @@ void initialSolution(vector<Entity> entities, vector<Room> rooms, int nOfRooms, 
 	{
 		int i = randint(nOfRooms);
 		Room r = rooms.at(i);
-		(*solution).insert(pair<int, int>(e.getID(), r.getID()));
+		(*solution).insert(pair<int, int>(e.id, r.id));
 	}
 }
 
