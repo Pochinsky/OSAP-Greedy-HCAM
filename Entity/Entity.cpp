@@ -3,27 +3,17 @@
 
 using namespace std;
 
-// setters
-void Entity::setID(int ID) { this->ID = ID; }
-
-void Entity::setSpace(double space) { this->space = space; }
-
-// getters
-int Entity::getID() const { return this->ID; }
-
-double Entity::getSpace() { return this->space; }
-
 // constructor
-Entity::Entity(int ID, double space)
+Entity::Entity(int id, double space)
 {
-    this->setID(ID);
-    this->setSpace(space);
+    this->id = id;
+    this->space = space;
 }
 
 // methods
 void Entity::print()
 {
     cout << "########## Entidad ##########" << endl;
-    cout << "ID: " << this->getID() << endl;
-    cout << "espacio: " << this->getSpace() << endl;
+    cout << "ID: " << this->id << endl;
+    cout << "espacio: " << this->space << endl;
 }

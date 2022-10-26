@@ -1,37 +1,24 @@
 /**
  * @brief   Representación de una entidad
- * 
+ *
  */
 class Entity
 {
-private:
+public:
     /**
      * Atributos
      */
-    int ID;
+    int id;
     double space;
-
-public:
-    /**
-     * Setters
-     */
-    void setID(int ID);
-    void setSpace(double space);
-
-    /**
-     * Getters
-     */
-    int getID() const;
-    double getSpace();
 
     /**
      * Constructor
      */
-    Entity(int ID, double space);
+    Entity(int id, double space);
 
     /**
      * @brief   Muestra por pantalla la información de la entidad
-     * 
+     *
      */
     void print();
 };

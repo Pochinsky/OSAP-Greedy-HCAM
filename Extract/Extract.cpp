@@ -40,9 +40,8 @@ void extractData(
 {
     // declare variables
     int
-        ID,
+        id,
         floor,
-        sizeLA,
         type,
         constraintType,
         parameter1,
@@ -78,9 +77,9 @@ void extractData(
     {
         getline(readFile, line);
         v = splitString(line, ' ');
-        ID = stoi(v[0]);
+        id = stoi(v[0]);
         space = stod(v[2]);
-        Entity e(ID, space);
+        Entity e(id, space);
         (*entities).push_back(e);
     }
     // set rooms
@@ -91,13 +90,12 @@ void extractData(
     {
         getline(readFile, line);
         v = splitString(line, ' ');
-        ID = stoi(v[0]);
+        id = stoi(v[0]);
         floor = stoi(v[1]);
         capacity = stod(v[2]);
-        sizeLA = stoi(v[3]);
         for (j = 4; j < v.size(); j++)
             adjacentRooms.push_back(stoi(v[j]));
-        Room r(ID, floor, capacity, sizeLA, adjacentRooms);
+        Room r(id, floor, capacity, adjacentRooms);
         (*rooms).push_back(r);
         adjacentRooms.clear();
     }
@@ -110,12 +108,12 @@ void extractData(
     {
         getline(readFile, line);
         v = splitString(line, ' ');
-        ID = stoi(v[0]);
+        id = stoi(v[0]);
         type = stoi(v[1]);
         constraintType = stoi(v[2]);
         parameter1 = stoi(v[3]);
         parameter2 = stoi(v[4]);
-        Constraint c(ID, type, constraintType, parameter1, parameter2);
+        Constraint c(id, type, constraintType, parameter1, parameter2);
         if (constraintType == 1)
             (*hardConstraints).push_back(c);
         else

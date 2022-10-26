@@ -10,14 +10,6 @@ using namespace std;
 class Room
 {
 private:
-    /**
-     * Atributos
-     */
-    int ID;
-    int floor;
-    double capacity;
-    int sizeLA;
-    list<int> adjacentRooms;
 
     /**
      * @brief   Muestra por pantalla las salas adyacentes de la sala en cuestión
@@ -25,29 +17,19 @@ private:
      */
     void printAdjacentList();
 
-public:
+public: 
     /**
-     * Setters
+     * Atributos
      */
-    void setID(int ID);
-    void setFloor(int floor);
-    void setCapacity(double capacity);
-    void setSizeLA(int sizeLA);
-    void setAdjacentRooms(list<int> adjacentRooms);
-
-    /**
-     * Getters
-     */
-    int getID();
-    int getFloor();
-    double getCapacity();
-    int getSizeLA();
-    list<int> getAdjacentRooms();
+    int id;
+    int floor;
+    double capacity;
+    list<int> adjacentRooms;
 
     /**
      * Constructor
      */
-    Room(int ID, int floor, double capacity, int sizeLA, list<int> adjacentRooms);
+    Room(int id, int floor, double capacity, list<int> adjacentRooms);
 
     /**
      * @brief   Muestra por pantalla la información de la sala
