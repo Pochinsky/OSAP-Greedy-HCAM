@@ -48,7 +48,7 @@ void extractData(
         parameter2,
         i;
     size_t j;
-    list<int> adjacentRooms;
+    vector<int> adjacentRooms;
     double space, capacity;
     ifstream readFile(filename);
     string line;

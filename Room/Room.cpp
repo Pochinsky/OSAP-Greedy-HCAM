@@ -2,7 +2,7 @@
 #include "Room.h"
 
 // constructor
-Room::Room(int id, int floor, double capacity, list<int> adjacentRooms)
+Room::Room(int id, int floor, double capacity, vector<int> adjacentRooms)
 {
     this->id = id;
     this->floor = floor;
@@ -13,10 +13,9 @@ Room::Room(int id, int floor, double capacity, list<int> adjacentRooms)
 // methods
 void Room::printAdjacentList()
 {
-    list<int>::iterator it;
     cout << "[ ";
-    for (it = this->adjacentRooms.begin(); it != this->adjacentRooms.end(); ++it)
-        cout << *it << " ";
+    for (int r : this->adjacentRooms)
+        cout << r << " ";
     cout << "]" << endl;
 }
 
