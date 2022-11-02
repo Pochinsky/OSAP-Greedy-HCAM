@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
-#include "../Entity/Entity.h"
-#include "../Room/Room.h"
-#include "../Constraint/Constraint.h"
+#include "../Entity/Entity.hpp"
+#include "../Room/Room.hpp"
+#include "../Constraint/Constraint.hpp"
 
 /**
  * @brief	Divide un string en varios substrings utilizando como punto de corte un delimitador dado

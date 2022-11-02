@@ -1,27 +1,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include "../Extract/Extract.h"
-
-/**
- * @brief	Genera un número entero aleatorio
- *
- * @param 	n		Número que determina el límite superior del rango disponible
- * @return int	Número aleatorio entre 0 y n-1
- */
-int randint(int n);
-
-bool checkAllocation(int idEntity, int idRoom, map<int,int> solution);
-
-bool checkCapacity(int idRoom, vector<Entity> entities, vector<Room> rooms, map<int, int> solution);
-
-bool checkSameRoom(int idEntity1, int idEntity2, map<int, int> solution);
-
-bool checkAdjacency(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution);
-
-bool checkNearness(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution);
-
-bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constraint> hardConstraints, map<int, int> solution);
+#include "../Extract/Extract.hpp"
 
 /**
  * @brief	Genera una solución inicial aleatoria
@@ -35,6 +15,7 @@ void initialSolution(
 		vector<Entity> entities,
 		vector<Room> rooms,
 		int nOfRooms,
+		vector<Constraint> hardConstraints,
 		map<int, int> *solution);
 
 /**
@@ -62,10 +43,3 @@ void hillClimbing(
 		vector<Constraint> softConstraints,
 		vector<Constraint> hardConstraints,
 		map<int, int> *solution);
-
-/**
- * @brief	Muestra por pantalla las asignaciones de una solución
- *
- * @param solution	Hashmap el cual contiene la solución que se quiere visualizar
- */
-void printSolution(map<int, int> solution);
