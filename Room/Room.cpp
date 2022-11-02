@@ -1,5 +1,5 @@
 #include <iterator>
-#include "Room.h"
+#include "Room.hpp"
 
 // constructor
 Room::Room(int id, int floor, double capacity, vector<int> adjacentRooms)

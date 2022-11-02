@@ -1,5 +1,5 @@
 #include <iostream>
-#include "./Solution/Solution.h"
+#include "./Solution/Solution.hpp"
 
 #define RESET "\033[0m"
 #define RED "\033[31m"
