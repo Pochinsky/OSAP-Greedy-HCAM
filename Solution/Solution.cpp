@@ -1,208 +1,146 @@
-#include <cstdlib>
 #include <algorithm>
-#include "Solution.h"
+#include <limits>
+#include "GreedyHelpers.hpp"
 
-int randint(int n) { return rand() % n; }
-
-bool checkAllocation(int idEntity, int idRoom, map<int, int> solution)
+void initialSolution(vector<Entity> entities, vector<Room> rooms, int nOfRooms, vector<Constraint> hardConstraints, map<int, int> *solution)
 {
-	map<int, int>::iterator itS;
-	for (itS = solution.begin(); itS != solution.end(); itS++)
-		if (idEntity == itS->first && idRoom != itS->second)
-			return false;
-	return true;
-}
-
-bool checkCapacity(int idRoom, vector<Entity> entities, vector<Room> rooms, map<int, int> solution)
-{
-	vector<Room>::iterator itR;
-	int roomCapacity;
-	for (itR = rooms.begin(); itR != rooms.end(); itR++)
-		if (idRoom == itR->id)
-			roomCapacity = itR->capacity;
-	map<int, int>::iterator itS;
-	list<int> entitiesInRoom;
-	entitiesInRoom.push_back(1);
-	entitiesInRoom.clear();
-	for (itS = solution.begin(); itS != solution.end(); itS++)
-		if (idRoom == itS->second)
-			entitiesInRoom.push_back(itS->first);
-	vector<Entity>::iterator itE;
-	int sizeUse = 0;
-	for (itE = entities.begin(); itE != entities.end(); itE++)
-		if (find(entitiesInRoom.begin(), entitiesInRoom.end(), itE->id) != entitiesInRoom.end())
-			sizeUse += itE->space;
-	if (sizeUse > roomCapacity)
-		return false;
-	return true;
-}
-
-bool checkSameRoom(int idEntity1, int idEntity2, map<int, int> solution)
-{
-	int idRoom1, idRoom2;
-	map<int, int>::iterator itS;
-	for (itS = solution.begin(); itS != solution.end(); itS++)
+	// set variables
+	map<int, double> spaceAvailable;
+	for (Room r : rooms)
+		spaceAvailable[r.id] = r.capacity;
+	vector<int> capacity;
+	vector<int> notSharing;
+	map<int, int> allocation;
+	map<int, vector<int>> nonAllocation;
+	map<int, vector<int>> sameRoom;
+	map<int, vector<int>> notSameRoom;
+	map<int, vector<int>> adjacency;
+	map<int, vector<int>> nearby;
+	map<int, vector<int>> awayFrom;
+	map<int, vector<int>> roomsProhibited;
+	// save parameter or parameters of all constraint by type
+	for (Constraint c : hardConstraints)
 	{
-		if (idEntity1 == itS->first)
-			idRoom1 = itS->first;
-		else if (idEntity1 == itS->second)
-			idRoom1 = itS->second;
-		if (idEntity2 == itS->first)
-			idRoom2 = itS->first;
-		else if (idEntity2 == itS->second)
-			idRoom2 = itS->second;
-	}
-	if (idRoom1 != idRoom2)
-		return false;
-	return true;
-}
-
-bool checkAdjacency(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution)
-{
-	int idRoom1, idRoom2;
-	map<int, int>::iterator itS;
-	for (itS = solution.begin(); itS != solution.end(); itS++)
-	{
-		if (idEntity1 == itS->first)
-			idRoom1 = itS->first;
-		else if (idEntity1 == itS->second)
-			idRoom1 = itS->second;
-		if (idEntity2 == itS->first)
-			idRoom2 = itS->first;
-		else if (idEntity2 == itS->second)
-			idRoom2 = itS->second;
-	}
-	vector<Room>::iterator itR;
-	for (itR = rooms.begin(); itR != rooms.end(); itR++)
-	{
-		if (idRoom1 == itR->id)
-			if (find(itR->adjacentRooms.begin(), itR->adjacentRooms.end(), idRoom2) == itR->adjacentRooms.end())
-				return false;
-		if (idRoom2 == itR->id)
-			if (find(itR->adjacentRooms.begin(), itR->adjacentRooms.end(), idRoom1) == itR->adjacentRooms.end())
-				return false;
-	}
-	return true;
-}
-
-bool checkNearness(int idEntity1, int idEntity2, vector<Room> rooms, map<int, int> solution)
-{
-	int idRoom1, idRoom2;
-	map<int, int>::iterator itS;
-	for (itS = solution.begin(); itS != solution.end(); itS++)
-	{
-		if (idEntity1 == itS->first)
-			idRoom1 = itS->first;
-		else if (idEntity1 == itS->second)
-			idRoom1 = itS->second;
-		if (idEntity2 == itS->first)
-			idRoom2 = itS->first;
-		else if (idEntity2 == itS->second)
-			idRoom2 = itS->second;
-	}
-	int idFloor1, idFloor2;
-	vector<Room>::iterator itR;
-	for (itR = rooms.begin(); itR != rooms.end(); itR++)
-	{
-		if (idRoom1 == itR->id)
-			idFloor1 = itR->floor;
-		if (idRoom2 == itR->id)
-			idFloor2 = itR->floor;
-	}
-	if (idFloor1 != idFloor2)
-		return false;
-	return true;
-}
-
-bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constraint> hardConstraints, map<int, int> solution)
-{
-	vector<Constraint>::iterator itC;
-	for (itC = hardConstraints.begin(); itC != hardConstraints.end(); itC++)
-	{
-		cout << "########## checkFeasible " << itC - hardConstraints.begin() << " ##########" << endl;
-		switch (itC->type)
+		switch (c.type)
 		{
-		case 0: /* ALLOCATION_CONSTRAINT */
+		case 0:
 		{
-			cout << "ALLOCATION_CONSTRAINT" << endl;
-			if (!checkAllocation(itC->parameter1, itC->parameter2, solution))
-				return false;
+			allocation[c.parameter1] = c.parameter2;
 			break;
 		}
-		case 1: /* NONALLOCATION_CONSTRAINT */
+		case 1:
 		{
-			cout << "NONALLOCATION_CONSTRAINT" << endl;
-			if (checkAllocation(itC->parameter1, itC->parameter2, solution))
-				return false;
+			nonAllocation[c.parameter1].push_back(c.parameter2);
 			break;
 		}
-		case 3: /* CAPACITY_CONSTRAINT */
+		case 3:
 		{
-			cout << "CAPACITY_CONSTRAINT" << endl;
-			if (!checkCapacity(itC->id, entities, rooms, solution))
-				return false;
+			capacity.push_back(c.parameter1);
 			break;
 		}
-		case 4: /* SAMEROOM_CONSTRAINT */
+		case 4:
 		{
-			cout << "SAMEROOM_CONSTRAINT" << endl;
-			if (!checkSameRoom(itC->parameter1, itC->parameter2, solution))
-				return false;
+			sameRoom[c.parameter1].push_back(c.parameter2);
 			break;
 		}
-		case 5: /* NOTSAMEROOM_CONSTRAINT */
+		case 5:
 		{
-			cout << "NOTSAMEROOM_CONSTRAINT" << endl;
-			if (checkSameRoom(itC->parameter1, itC->parameter2, solution))
-				return false;
+			notSameRoom[c.parameter1].push_back(c.parameter2);
 			break;
 		}
-		case 6: /* NOTSHARING_CONSTRAINT */
+		case 6:
 		{
-			cout << "NOTSHARING_CONSTRAINT" << endl;
-			map<int, int>::iterator itS;
-			for (itS = solution.begin(); itS != solution.end(); itS++)
-				if (checkSameRoom(itC->parameter1, itS->first, solution))
-					return false;
+			notSharing.push_back(c.parameter1);
 			break;
 		}
-		case 7: /* ADJACENCY_CONSTRAINT */
+		case 7:
 		{
-			cout << "ADJACENCY_CONSTRAINT" << endl;
-			if (!checkAdjacency(itC->parameter1, itC->parameter2, rooms, solution))
-				return false;
+			adjacency[c.parameter1].push_back(c.parameter2);
 			break;
 		}
-		case 8: /* NEARBY_CONSTRAINT */
+		case 8:
 		{
-			cout << "NEARBY_CONSTRAINT" << endl;
-			if (!checkNearness(itC->parameter1, itC->parameter2, rooms, solution))
-				return false;
+			nearby[c.parameter1].push_back(c.parameter2);
 			break;
 		}
-		case 9: /* AWAYFROM_CONSTRAINT */
+		case 9:
 		{
-			cout << "AWAYFROM_CONSTRAINT" << endl;
-			if (checkNearness(itC->parameter1, itC->parameter2, rooms, solution))
-				return false;
+			awayFrom[c.parameter1].push_back(c.parameter2);
 			break;
 		}
 		default:
 			break;
 		}
 	}
-	return true;
-}
-
-void initialSolution(vector<Entity> entities, vector<Room> rooms, int nOfRooms, map<int, int> *solution)
-{
-	vector<Room>::iterator it;
-	for (Entity e : entities)
+	// ALLOCATION_CONSTRAINT
+	for (Entity entity : entities)
 	{
-		int i = randint(nOfRooms);
-		Room r = rooms.at(i);
-		(*solution).insert(pair<int, int>(e.id, r.id));
+		if (allocation.find(entity.id) != allocation.end())
+		{
+			(*solution)[entity.id] = allocation[entity.id];
+			spaceAvailable[allocation[entity.id]] -= entity.space;
+		}
 	}
+	// ADJACENCY_CONSTRAINT handless
+	for (Entity entity : entities) // entity == e1
+	{
+		// e1 es el parametro 1 de una ADJACENCY_CONSTRAINT
+		if (adjacency.find(entity.id) != adjacency.end())
+		{
+			for (int entityId : adjacency[entity.id]) // entityId == e2
+			{
+				// e2 esta en la solucion y e1 tiene que ser asignada a
+				// una sala adyacente a la que fue asignada e2
+				if (solution->find(entityId) != solution->end())
+					greedy(entity.id, entity.space, entityId, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+								 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 1, nOfRooms);
+				// e2 no esta en la solucion, entonces se tiene que
+				// asignar e2 y luego asignar e1 a una sala adyacente
+				// de la asignada a e2
+				else
+				{
+					// allocate e2
+					greedy(entityId, getSpace(entityId, entities), -1, entities, rooms, nonAllocation, capacity, sameRoom,
+								 notSameRoom, notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 3, nOfRooms);
+					// allocate e1
+					greedy(entity.id, entity.space, entityId, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+								 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 1, nOfRooms);
+				}
+			}
+		}
+		// e1 puede ser el parametro 2 de una ADJACENCY_CONSTRAINT
+		else
+		{
+			for (auto it = adjacency.begin(); it != adjacency.end(); it++)
+			{
+				// e1 es el parametro 2 de una ADJACENCY_CONSTRAINT
+				if (find(it->second.begin(), it->second.end(), entity.id) != it->second.end())
+				{
+					// la entidad parametro 1 de la ADJACENCY_CONSTRAINT esta en la solucion
+					// y e1 tiene que ser asignada a una sala adyacente a la del parametro 1
+					if (solution->find(it->first) != solution->end())
+						greedy(entity.id, entity.space, it->first, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+									 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 1, nOfRooms);
+					// la entidad parametro 1 de la ADJACENCY_CONSTRAINT no esta en la solucion
+					// y e1 tiene que ser asignada
+					else
+						greedy(entity.id, entity.space, -1, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+									 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 3, nOfRooms);
+				}
+			}
+		}
+	}
+	// NOTSHARING_CONSTRAINT handless
+	for (Entity entity : entities)
+		if (solution->find(entity.id) == solution->end())
+			if (find(notSharing.begin(), notSharing.end(), entity.id) != notSharing.end())
+				greedy(entity.id, entity.space, -1, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+							 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 2, nOfRooms);
+	// start greedy
+	for (Entity entity : entities)
+		if (solution->find(entity.id) == solution->end())
+			greedy(entity.id, entity.space, -1, entities, rooms, nonAllocation, capacity, sameRoom, notSameRoom,
+						 notSharing, adjacency, nearby, awayFrom, &spaceAvailable, &roomsProhibited, solution, 2, nOfRooms);
 }
 
 void hillClimbing(
@@ -217,22 +155,12 @@ void hillClimbing(
 		vector<Constraint> hardConstraints,
 		map<int, int> *solution)
 {
-	// variable para finalizar el algoritmo
 	bool local = true;
-	// se genera una solución candidata aleatoria
+	int neighbors = 0;
 	initialSolution(
 			entities,
 			rooms,
 			nOfRooms,
+			hardConstraints,
 			solution);
-	cout << checkFeasible(entities, rooms, hardConstraints, *solution) << endl;
-	map<int, int> newSolution;
-}
-
-void printSolution(map<int, int> solution)
-{
-	cout << "########## Solución ##########" << endl;
-	map<int, int>::iterator it;
-	for (it = solution.begin(); it != solution.end(); ++it)
-		cout << "e" << it->first << "\tto\tr" << it->second << endl;
 }

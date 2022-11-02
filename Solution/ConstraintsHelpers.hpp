@@ -13,11 +13,12 @@ bool checkNotSameRoomConstraint(int eId, int rId, map<int, vector<int>> notSameR
 
 bool checkNotSharingConstraint(int eId, int rId, vector<int> notSharing, map<int, int> solution);
 
+bool checkAdjacencyConstraint(int eId, int rId, vector<Room> rooms, map<int, vector<int>> adjacency, map<int, int> solution);
+
 bool checkNearbyConstraint(int eId, int rId, map<int, vector<int>> nearby, vector<Room> rooms, map<int, int> solution);
 
 bool checkAwayFromConstraint(int eId, int rId, map<int, vector<int>> awayFrom, vector<Room> rooms, map<int, int> solution);
 
-bool checkAllConstraints(
-		int eId, double eSpace, int rId, map<int, vector<int>> nonAllocation, vector<int> capacity, map<int, vector<int>> sameRoom,
-		map<int, vector<int>> notSameRoom, vector<int> notSharing, map<int, vector<int>> nearby, map<int, vector<int>> awayFrom,
-		map<int, double> spaceAvailable, vector<Room> rooms, map<int, int> solution);
+bool checkAllConstraints(int eId, double eSpace, int rId, map<int, vector<int>> nonAllocation, vector<int> capacity, map<int, vector<int>> sameRoom,
+												 map<int, vector<int>> notSameRoom, vector<int> notSharing, map<int, vector<int>> adjacency, map<int, vector<int>> nearby,
+												 map<int, vector<int>> awayFrom, map<int, double> spaceAvailable, vector<Room> rooms, map<int, int> solution);

@@ -77,6 +77,42 @@ bool checkNotSharingConstraint(int eId, int rId, vector<int> notSharing, map<int
 	return check;
 }
 
+bool checkAdjacencyConstraint(int eId, int rId, vector<Room> rooms, map<int, vector<int>> adjacency, map<int, int> solution)
+{
+	bool check = true;
+	if (adjacency.find(eId) != adjacency.end())
+	{
+		for (int eIdAux : adjacency[eId])
+		{
+			if (solution.find(eIdAux) != solution.end())
+			{
+				vector<int> adjacencyRooms = getAdjacencyRooms(solution[eIdAux], rooms);
+				if (find(adjacencyRooms.begin(), adjacencyRooms.end(), rId) == adjacencyRooms.end())
+					check = false;
+			}
+		}
+	}
+	else
+	{
+		for (auto it = solution.begin(); it != solution.end(); it++)
+		{
+			if (adjacency.find(it->first) != adjacency.end())
+			{
+				for (int eIdAux : adjacency[it->first])
+				{
+					if (eIdAux == eId)
+					{
+						vector<int> adjacencyRooms = getAdjacencyRooms(it->second, rooms);
+						if (find(adjacencyRooms.begin(), adjacencyRooms.end(), rId) == adjacencyRooms.end())
+							check = false;
+					}
+				}
+			}
+		}
+	}
+	return check;
+}
+
 bool checkNearbyConstraint(int eId, int rId, map<int, vector<int>> nearby, vector<Room> rooms, map<int, int> solution)
 {
 	bool check = true;
@@ -153,10 +189,9 @@ bool checkAwayFromConstraint(int eId, int rId, map<int, vector<int>> awayFrom, v
 	return check;
 }
 
-bool checkAllConstraints(
-		int eId, double eSpace, int rId, map<int, vector<int>> nonAllocation, vector<int> capacity, map<int, vector<int>> sameRoom,
-		map<int, vector<int>> notSameRoom, vector<int> notSharing, map<int, vector<int>> nearby, map<int, vector<int>> awayFrom,
-		map<int, double> spaceAvailable, vector<Room> rooms, map<int, int> solution)
+bool checkAllConstraints(int eId, double eSpace, int rId, map<int, vector<int>> nonAllocation, vector<int> capacity, map<int, vector<int>> sameRoom,
+												 map<int, vector<int>> notSameRoom, vector<int> notSharing, map<int, vector<int>> adjacency, map<int, vector<int>> nearby,
+												 map<int, vector<int>> awayFrom, map<int, double> spaceAvailable, vector<Room> rooms, map<int, int> solution)
 {
 	bool check = true;
 	if (!checkNonAllocationConstraint(eId, rId, nonAllocation))
@@ -168,6 +203,8 @@ bool checkAllConstraints(
 	if (!checkNotSameRoomConstraint(eId, rId, notSameRoom, solution))
 		check = false;
 	if (!checkNotSharingConstraint(eId, rId, notSharing, solution))
+		check = false;
+	if (!checkAdjacencyConstraint(eId, rId, rooms, adjacency, solution))
 		check = false;
 	if (!checkNearbyConstraint(eId, rId, nearby, rooms, solution))
 		check = false;

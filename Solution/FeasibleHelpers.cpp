@@ -160,6 +160,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 					if (checkSameRoom(c.parameter1, itS->first, solution))
 					{
 						cout << "NOTSHARING_CONSTRAINT" << endl;
+						cout << "e" << c.parameter1 << "\tr" << solution[c.parameter1] << endl;
 						return false;
 					}
 				}

@@ -5,11 +5,14 @@ RM 				= rm -f *.o
 
 all: main
 
-main: constraint.o room.o entity.o extract.o solution.o prohibitehelpers.o feasiblehelpers.o helpers.o constraintshelpers.o main.o
-	$(CC) $(CFLAGS) -o main main.o ConstraintsHelpers.o Helpers.o FeasibleHelpers.o ProhibiteHelpers.o Solution.o Extract.o Entity.o Room.o Constraint.o
+main: constraint.o room.o entity.o extract.o solution.o prohibitehelpers.o feasiblehelpers.o helpers.o constraintshelpers.o greedyhelpers.o main.o
+	$(CC) $(CFLAGS) -o main main.o GreedyHelpers.o ConstraintsHelpers.o Helpers.o FeasibleHelpers.o ProhibiteHelpers.o Solution.o Extract.o Entity.o Room.o Constraint.o
 
 main.o:  main.cpp
 	$(CC) $(CFLAGS) -c main.cpp 
+
+greedyhelpers.o: Solution/GreedyHelpers.cpp
+	$(CC) $(CFLAGS) -c Solution/GreedyHelpers.cpp
 
 constraintshelpers.o: Solution/ConstraintsHelpers.cpp
 	$(CC) $(CFLAGS) -c Solution/ConstraintsHelpers.cpp
