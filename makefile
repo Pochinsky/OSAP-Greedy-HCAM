@@ -5,11 +5,14 @@ RM 				= rm -f *.o
 
 all: main
 
-main: constraint.o room.o entity.o extract.o solution.o main.o
-	$(CC) $(CFLAGS) -o main main.o Solution.o Extract.o Entity.o Room.o Constraint.o
+main: constraint.o room.o entity.o extract.o solution.o helpers.o main.o
+	$(CC) $(CFLAGS) -o main main.o Helpers.o Solution.o Extract.o Entity.o Room.o Constraint.o
 
 main.o:  main.cpp
 	$(CC) $(CFLAGS) -c main.cpp 
+
+helpers.o: Solution/Helpers.cpp
+	$(CC) $(CFLAGS) -c Solution/Helpers.cpp
 
 solution.o: Solution/Solution.cpp
 	$(CC) $(CFLAGS) -c Solution/Solution.cpp
