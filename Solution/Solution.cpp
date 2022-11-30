@@ -1,6 +1,11 @@
 #include <algorithm>
 #include <limits>
+#include <chrono>
 #include "GreedyHelpers.hpp"
+
+using namespace std;
+using namespace std::chrono;
+using namespace std::chrono_literals;
 
 void initialSolution(vector<Entity> entities, vector<Room> rooms, int nOfRooms, vector<Constraint> hardConstraints, map<int, int> *solution)
 {
@@ -144,18 +149,14 @@ void initialSolution(vector<Entity> entities, vector<Room> rooms, int nOfRooms, 
 }
 
 void hillClimbing(
-		int nOfEntities,
+    int nOfEntities,
 		int nOfRooms,
-		int nOfFloors,
-		int nOfHardConstraints,
-		int nOfSoftConstraints,
 		vector<Entity> entities,
 		vector<Room> rooms,
 		vector<Constraint> softConstraints,
 		vector<Constraint> hardConstraints,
 		map<int, int> *solution)
 {
-	bool local = true;
 	int neighbors = 0;
 	initialSolution(
 			entities,
@@ -163,4 +164,29 @@ void hillClimbing(
 			nOfRooms,
 			hardConstraints,
 			solution);
+  auto startHC = high_resolution_clock::now();
+  bool timeFlag = true;
+	do
+	{
+		map<int, int> candidateSolution = movementToSolution(*solution, neighbors, nOfRooms);
+		neighbors++;
+		bool candidateSolutionIsFeasible = checkFeasible(entities, rooms, hardConstraints, candidateSolution);
+		if (candidateSolutionIsFeasible)
+		{
+			double valueCurrentSolution = evaluateSolution(*solution, entities, rooms, softConstraints);
+			double valueCandidateSolution = evaluateSolution(candidateSolution, entities, rooms, softConstraints);
+			if (valueCandidateSolution < valueCurrentSolution)
+			{
+				solution->clear();
+				for (auto it = candidateSolution.begin(); it != candidateSolution.end(); it++)
+					(*solution)[it->first] = it->second;
+				neighbors = 0;
+			}
+		}
+    auto intermediateHC = high_resolution_clock::now();
+    auto delta = duration_cast<seconds>(intermediateHC - startHC);
+    if (delta > 180s)
+      timeFlag = false;
+	} while (neighbors < nOfRooms && timeFlag);
+	cout << "value of = " << evaluateSolution(*solution, entities, rooms, softConstraints) << endl;
 }

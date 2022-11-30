@@ -56,12 +56,6 @@ void greedyApproach2(int eId, int *candidateRoomId, double *candidateRoomSpace, 
 	{
 		if (find(roomsProhibited[eId].begin(), roomsProhibited[eId].end(), room.id) == roomsProhibited[eId].end())
 		{
-			// if (eId == 57)
-			// 	cout << "###########################" << endl
-			// 			 << "e57 to r" << room.id << endl
-			// 			 << "space available = " << spaceAvailable[room.id] - getSpace(eId, entities) << endl
-			// 			 << "candidate room space = " << *candidateRoomSpace << endl;
-			// check constraints respect to solution
 			isFeasible = checkAllConstraints(eId, getSpace(eId, entities), room.id, nonAllocation, capacity, sameRoom,
 																			 notSameRoom, notSharing, adjacency, nearby, awayFrom, spaceAvailable, rooms, solution);
 		}
@@ -130,7 +124,7 @@ void greedy(int eId1, double eSpace1, int eId2, vector<Entity> entities, vector<
 		greedyApproach3(eId1, &candidateRoomId, &candidateRoomSpace, entities, rooms, nonAllocation, capacity, sameRoom,
 										notSameRoom, notSharing, adjacency, nearby, awayFrom, *spaceAvailable, *roomsProhibited, *solution, nOfRooms);
 	(*solution)[eId1] = candidateRoomId;
-	(*spaceAvailable)[candidateRoomId] -= candidateRoomSpace;
+	(*spaceAvailable)[candidateRoomId] = candidateRoomSpace;
 	// prohibite rooms to entities not allocated
 	for (Entity e : entities)
 		if (solution->find(e.id) == solution->end())

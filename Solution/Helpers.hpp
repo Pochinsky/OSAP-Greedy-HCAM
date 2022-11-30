@@ -11,6 +11,8 @@
  */
 int randint(int n);
 
+map<int, int> movementToSolution(map<int, int> currentSolution, int entityId, int nOfRooms);
+
 int getNotSharingIndex(vector<int> notSharing, int entityId);
 
 vector<int> getAdjacencyRooms(int roomId, vector<Room> rooms);

@@ -110,7 +110,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (!checkAllocation(c.parameter1, c.parameter2, solution))
 			{
-				cout << "ALLOCATION_CONSTRAINT" << endl;
+				// cout << "ALLOCATION_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -119,7 +119,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (checkAllocation(c.parameter1, c.parameter2, solution))
 			{
-				cout << "NONALLOCATION_CONSTRAINT" << endl;
+				// cout << "NONALLOCATION_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -128,7 +128,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (!checkCapacity(c.id, entities, rooms, solution))
 			{
-				cout << "CAPACITY_CONSTRAINT" << endl;
+				// cout << "CAPACITY_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -137,7 +137,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (!checkSameRoom(c.parameter1, c.parameter2, solution))
 			{
-				cout << "SAMEROOM_CONSTRAINT" << endl;
+				// cout << "SAMEROOM_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -146,7 +146,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (checkSameRoom(c.parameter1, c.parameter2, solution))
 			{
-				cout << "NOTSAMEROOM_CONSTRAINT" << endl;
+				// cout << "NOTSAMEROOM_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -159,8 +159,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 				{
 					if (checkSameRoom(c.parameter1, itS->first, solution))
 					{
-						cout << "NOTSHARING_CONSTRAINT" << endl;
-						cout << "e" << c.parameter1 << "\tr" << solution[c.parameter1] << endl;
+						// cout << "NOTSHARING_CONSTRAINT" << endl;
 						return false;
 					}
 				}
@@ -170,9 +169,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (!checkAdjacency(c.parameter1, c.parameter2, rooms, solution))
 			{
-				cout << "ADJACENCY_CONSTRAINT" << endl;
-				cout << "e" << c.parameter1 << "\tr" << solution[c.parameter1] << endl;
-				cout << "e" << c.parameter2 << "\tr" << solution[c.parameter2] << endl;
+				// cout << "ADJACENCY_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -181,7 +178,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (!checkNearness(c.parameter1, c.parameter2, rooms, solution))
 			{
-				cout << "NEARBY_CONSTRAINT" << endl;
+				// cout << "NEARBY_CONSTRAINT" << endl;
 				return false;
 			}
 			break;
@@ -190,7 +187,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 		{
 			if (checkNearness(c.parameter1, c.parameter2, rooms, solution))
 			{
-				cout << "AWAYFOM_CONSTRAINT" << endl;
+				// cout << "AWAYFOM_CONSTRAINT" << endl;
 			}
 			break;
 		}

@@ -1,8 +1,34 @@
+#include <iostream>
+#include <cstdlib>
 #include <algorithm>
 #include <bits/stdc++.h>
 #include "Helpers.hpp"
 
-int randint(int n) { return rand() % n; }
+int randint(int n)
+{
+  srand(time(0));
+	return rand() % n;
+}
+
+map<int, int> movementToSolution(map<int, int> currentSolution, int entityId, int nOfRooms)
+{
+	map<int, int> candidateSolution;
+	int roomId;
+	while (true)
+	{
+		roomId = randint(nOfRooms);
+		if (roomId != currentSolution[entityId])
+			break;
+	}
+	for (auto it = currentSolution.begin(); it != currentSolution.end(); it++)
+	{
+		if (it->first == entityId)
+			candidateSolution[it->first] = roomId;
+		else
+			candidateSolution[it->first] = it->second;
+	}
+	return candidateSolution;
+}
 
 int getNotSharingIndex(vector<int> notSharing, int entityId)
 {

@@ -5,17 +5,23 @@ RM 				= rm -f *.o
 
 all: main
 
-main: constraint.o room.o entity.o extract.o solution.o prohibitehelpers.o feasiblehelpers.o helpers.o constraintshelpers.o greedyhelpers.o main.o
-	$(CC) $(CFLAGS) -o main main.o GreedyHelpers.o ConstraintsHelpers.o Helpers.o FeasibleHelpers.o ProhibiteHelpers.o Solution.o Extract.o Entity.o Room.o Constraint.o
+main: constraint.o room.o entity.o extract.o solution.o prohibitehelpers.o feasiblehelpers.o helpers.o evaluationhelpers.o constraintshelpers.o greedyhelpers.o output.o main.o
+	$(CC) $(CFLAGS) -o main main.o Output.o GreedyHelpers.o ConstraintsHelpers.o EvaluationHelpers.o Helpers.o FeasibleHelpers.o ProhibiteHelpers.o Solution.o Extract.o Entity.o Room.o Constraint.o
 
 main.o:  main.cpp
 	$(CC) $(CFLAGS) -c main.cpp 
+
+output.o: Output/Output.cpp
+	$(CC) $(CFLAGS) -c Output/Output.cpp
 
 greedyhelpers.o: Solution/GreedyHelpers.cpp
 	$(CC) $(CFLAGS) -c Solution/GreedyHelpers.cpp
 
 constraintshelpers.o: Solution/ConstraintsHelpers.cpp
 	$(CC) $(CFLAGS) -c Solution/ConstraintsHelpers.cpp
+
+evaluationhelpers.o: Solution/EvaluationHelpers.cpp
+	$(CC) $(CFLAGS) -c Solution/EvaluationHelpers.cpp
 
 helpers.o: Solution/Helpers.cpp
 	$(CC) $(CFLAGS) -c Solution/Helpers.cpp
@@ -42,7 +48,7 @@ constraint.o: Constraint/Constraint.cpp
 	$(CC) $(CFLAGS) -c Constraint/Constraint.cpp
 
 run:
-	./main $(instance)
+	./main $(instance) $(seed)
 
 clean:
 	$(RM)

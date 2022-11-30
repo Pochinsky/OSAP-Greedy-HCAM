@@ -1,10 +1,12 @@
 #include <iostream>
-#include "./Solution/Solution.hpp"
+#include <chrono>
+#include "./Output/Output.hpp"
 
 #define RESET "\033[0m"
 #define RED "\033[31m"
 
 using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char **argv)
 {
@@ -12,8 +14,7 @@ int main(int argc, char **argv)
     if (argc > 1)
     {
         // variables para guardar la información de la instancia
-        int
-            nOfEntities,
+        int nOfEntities,
             nOfRooms,
             nOfFloors,
             nOfHardConstraints,
@@ -24,30 +25,31 @@ int main(int argc, char **argv)
         // se almacena la información de la instancia
         string instance = argv[1];
         string path = "Instances/" + instance + ".txt";
-        extractData(
-            path,
-            &nOfEntities,
-            &nOfRooms,
-            &nOfFloors,
-            &nOfHardConstraints,
-            &nOfSoftConstraints,
-            &entities,
-            &rooms,
-            &softConstraints,
-            &hardConstraints);
+        extractData(path,
+                    &nOfEntities,
+                    &nOfRooms,
+                    &nOfFloors,
+                    &nOfHardConstraints,
+                    &nOfSoftConstraints,
+                    &entities,
+                    &rooms,
+                    &softConstraints,
+                    &hardConstraints);
         // se aplica hill climbing first improvement
         map<int, int> solution;
-        hillClimbing(
-            nOfEntities,
-            nOfRooms,
-            nOfFloors,
-            nOfHardConstraints,
-            nOfSoftConstraints,
-            entities,
-            rooms,
-            softConstraints,
-            hardConstraints,
-            &solution);
+        auto startHC = high_resolution_clock::now();
+        hillClimbing(nOfEntities,
+                     nOfRooms,
+                     entities,
+                     rooms,
+                     softConstraints,
+                     hardConstraints,
+                     &solution);
+        auto stopHC = high_resolution_clock::now();
+        auto durationHC = duration_cast<seconds>(stopHC - startHC);
+        cout << "Execution time = " << durationHC.count() << " seconds" << endl;
+        // cout << "hill climbing first improvement executed in " << durationHC.count() << " seconds" << endl;
+        output(solution, entities, rooms, softConstraints, instance);
     }
     else
     {

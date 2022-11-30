@@ -33,11 +33,8 @@ void initialSolution(
  * @param solution 						Hashmap sobre el cual se construye la solución del algoritmo
  */
 void hillClimbing(
-		int nOfEntities,
+    int nOfEntities,
 		int nOfRooms,
-		int nOfFloors,
-		int nOfHardConstraints,
-		int nOfSoftConstraints,
 		vector<Entity> entities,
 		vector<Room> rooms,
 		vector<Constraint> softConstraints,
