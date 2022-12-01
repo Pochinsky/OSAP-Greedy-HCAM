@@ -188,6 +188,7 @@ bool checkFeasible(vector<Entity> entities, vector<Room> rooms, vector<Constrain
 			if (checkNearness(c.parameter1, c.parameter2, rooms, solution))
 			{
 				// cout << "AWAYFOM_CONSTRAINT" << endl;
+				return false;
 			}
 			break;
 		}
