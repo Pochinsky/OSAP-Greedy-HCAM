@@ -48,7 +48,7 @@ constraint.o: Constraint/Constraint.cpp
 	$(CC) $(CFLAGS) -c Constraint/Constraint.cpp
 
 run:
-	./main $(instance) $(seed)
+	./main $(instance)
 
 clean:
 	$(RM)
