@@ -1,13 +1,5 @@
 # Hill Climbing First Improvement para Office Space Allocation Problem
 
-## Estructura del código
-
-El programa representa las entidades, las salas y las restricciones mediante clases definidas en `Entity`, `Room` y `Constraint` respectivamente.
-
-Con las funciones definidas en `Extract`, se extraen las entidades, las salas y las restricciones almacenándolas en listas de las clases respectivas.
-
-Mediante las funciones definidas en `Solution` se construye la solución final.
-
 ## Ejecución
 
 Para compilar el programa ejecute:
