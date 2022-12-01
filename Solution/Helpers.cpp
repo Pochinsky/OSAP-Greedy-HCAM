@@ -65,17 +65,3 @@ int getFloor(int roomId, vector<Room> rooms)
 			floor = r.floor;
 	return floor;
 }
-
-void printSolution(map<int, int> solution)
-{
-	cout << "########## Solución ##########" << endl;
-	map<int, int>::iterator it;
-	for (it = solution.begin(); it != solution.end(); ++it)
-		cout << "e" << it->first << "\tto\tr" << it->second << endl;
-}
-
-void printConstraints(vector<Constraint> constraints)
-{
-	for (Constraint c : constraints)
-		c.print();
-}
