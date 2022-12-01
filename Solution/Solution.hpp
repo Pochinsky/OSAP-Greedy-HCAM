@@ -3,14 +3,11 @@
 #include <vector>
 #include "../Extract/Extract.hpp"
 
-/**
- * @brief	Genera una solución inicial aleatoria
- *
- * @param entities	Vector de entidades.
- * @param rooms 		Vector de salas.
- * @param nOfRooms 	Cantidad de salas en la lista,
- * @param solution 	Hashmap sobre el cual se construye una solución inicial aleatoria
- */
+/************************************************
+ * 	Funcion que construye una solucion inicial  *
+ * 	mediante algoritmo greedy                   *
+ *                                              *
+ ************************************************/
 void initialSolution(
 		vector<Entity> entities,
 		vector<Room> rooms,
@@ -18,20 +15,11 @@ void initialSolution(
 		vector<Constraint> hardConstraints,
 		map<int, int> *solution);
 
-/**
- * @brief	Aplica Hill Climbing First Improve a una instancia del OSAP
- *
- * @param nOfEntities 				Número de entidades
- * @param nOfRooms 						Número de salas
- * @param nOfFloors 					Número de pisos
- * @param nOfHardConstraints	Número de restricciones duras
- * @param nOfSoftConstraints 	Número de restricciones blandas
- * @param entities 						Vector de entidades
- * @param rooms 							Vector de salas
- * @param softConstraints 		Vector de restricciones blandas
- * @param hardConstraints 		Vector de restricciones duras
- * @param solution 						Hashmap sobre el cual se construye la solución del algoritmo
- */
+/***************************************************
+ * 	Funcion que aplica un algoritmo Hill Climbing  *
+ * 	First Improvement para una instancia del OSAP  * 
+ *                                                 *
+ ***************************************************/
 void hillClimbing(
     int nOfEntities,
 		int nOfRooms,
